@@ -16,7 +16,7 @@ CREATE TABLE schools
     id          int not null AUTO_INCREMENT,
     name        varchar(128) not null,
     UNIQUE      (name)
-)
+);
 ALTER TABLE schools AUTO_INCREMENT = 1;
 
 CREATE TABLE students
@@ -33,7 +33,7 @@ CREATE TABLE students
     UNIQUE      (linkedin),
     UNIQUE      (resume_s3),
     FOREIGN KEY (school_id) REFERENCES schools(id)
-)
+);
 ALTER TABLE students AUTO_INCREMENT = 1;
 
 CREATE TABLE majors
@@ -42,7 +42,7 @@ CREATE TABLE majors
     major      varchar(64) not null,
     PRIMARY KEY (id),
     UNIQUE      (major)
-)
+);
 ALTER TABLE majors AUTO_INCREMENT = 1;
 
 CREATE TABLE student_major
@@ -52,7 +52,7 @@ CREATE TABLE student_major
     PRIMARY KEY (student_id, major_id),
     FOREIGN KEY (student_id) REFERENCES students(id),
     FOREIGN KEY (major_id) REFERENCES majors(id)
-)
+);
 
 CREATE TABLE skills
 (
@@ -60,7 +60,7 @@ CREATE TABLE skills
     skill       varchar(64) not null,
     PRIMARY KEY (id),
     UNIQUE      (skill)
-)
+);
 ALTER TABLE skills AUTO_INCREMENT = 1;
 
 CREATE TABLE student_skill
@@ -70,4 +70,42 @@ CREATE TABLE student_skill
     PRIMARY KEY (student_id, skill_id),
     FOREIGN KEY (student_id) REFERENCES students(id),
     FOREIGN KEY (skill_id) REFERENCES skills(id)
-)
+);
+
+CREATE TABLE industries
+(
+    id          int not null AUTO_INCREMENT,
+    industry    varchar(64) not null,
+    PRIMARY KEY (id),
+    UNIQUE      (industry)
+);
+ALTER TABLE industries AUTO_INCREMENT = 1;
+
+CREATE TABLE companies
+(
+    id          int not null AUTO_INCREMENT,
+    name        varchar(128) not null,
+    industry_id int not null,
+    location    varchar(256) not null,
+    PRIMARY KEY (id),
+    UNIQUE      (name),
+    UNIQUE      (location),
+    FOREIGN KEY (industry_id) REFERENCES industries(id)
+);
+ALTER TABLE companies AUTO_INCREMENT = 1;
+
+CREATE TABLE jobs
+(
+    id          int not null AUTO_INCREMENT,
+    title       varchar(128) not null,
+    description varchar(16384) not null,
+    url         varchar(256) not null,
+    status      varchar(64) not null,
+    min_pay     int,
+    max_pay     int,
+    company_id  int not null,
+    PRIMARY KEY (id),
+    UNIQUE      (url),
+    FOREIGN KEY (company_id) REFERENCES companies(id)
+);
+ALTER TABLE jobs AUTO_INCREMENT = 1;
