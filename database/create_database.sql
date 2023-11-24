@@ -2,19 +2,21 @@ CREATE DATABASE IF NOT EXISTS jobsearch;
 
 USE jobsearch;
 
-DROP TABLE IF EXISTS students;
-DROP TABLE IF EXISTS jobs;
-DROP TABLE IF EXISTS companies;
-DROP TABLE IF EXISTS majors;
-DROP TABLE IF EXISTS skills;
-DROP TABLE IF EXISTS schools;
 DROP TABLE IF EXISTS student_major;
 DROP TABLE IF EXISTS student_skill;
+DROP TABLE IF EXISTS majors;
+DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS students;
+DROP TABLE IF EXISTS schools;
+DROP TABLE IF EXISTS jobs;
+DROP TABLE IF EXISTS companies;
+DROP TABLE IF EXISTS industries;
 
 CREATE TABLE schools
 (
     id          int not null AUTO_INCREMENT,
     name        varchar(128) not null,
+    PRIMARY KEY (id),
     UNIQUE      (name)
 );
 ALTER TABLE schools AUTO_INCREMENT = 1;
