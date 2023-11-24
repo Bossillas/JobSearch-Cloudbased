@@ -1,5 +1,7 @@
 -- create initial data for the database
 
+USE jobsearch;
+
 INSERT INTO schools(name)
     values("Northwestern University"),
     values("Stanford University"),

@@ -1,3 +1,5 @@
+USE jobsearch;
+
 DROP USER IF EXISTS "jobsearch-read-only";
 DROP USER IF EXISTS "jobsearch-read-write";
 
