@@ -7,7 +7,7 @@
 //
 
 const config = {
-  photoapp_config: "photoapp-config.ini",
+  photoapp_config: "config.ini",
   photoapp_profile: "s3readwrite",
   service_port: 8080,
   page_size: 12

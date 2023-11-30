@@ -1,7 +1,7 @@
 //
 // app.get('/assets', async (req, res) => {...});
 //
-// Return all the assets from the database:
+// Return all the job related assets from job/company/industry tables in database:
 //
 const dbConnection = require('./database.js')
 
@@ -34,12 +34,17 @@ exports.get_assets = async (req, res) => {
         console.log("/stats: calling RDS...");
 
         var sql = `
-          SELECT j.id, j.title, j.url, j.min_pay,j.max_pay,c.name,c.industry_id,c.location
+          SELECT 
+            j.id, j.title, j.url, 
+            j.min_pay, j.max_pay,
+            c.name, i.industry, c.location
           FROM jobs j
-          join companies c
-          on j.company_id = c.id
-          where j.status = 'open'
-          ORDER BY j.id asc;
+          JOIN companies c
+            ON j.company_id = c.id
+          JOIN industries i
+            ON c.industry_id = i.id
+          WHERE j.status = 'open'
+          ORDER BY j.id ASC;
           `;
 
         dbConnection.query(sql, (err, results, _) => {
@@ -79,7 +84,7 @@ exports.get_assets = async (req, res) => {
           const item = results[0][i];
 
           // Extract columns as per your SQL query
-          const { id, title, url, min_pay, max_pay, name, industry_id, location } = item;
+          const { id, title, url, min_pay, max_pay, name, industry, location } = item;
           extractedData.push({
             jobId: id,
             jobTitle: title,
@@ -87,7 +92,7 @@ exports.get_assets = async (req, res) => {
             minPay: min_pay,
             maxPay: max_pay,
             companyName: name,
-            industryId: industry_id,
+            industry: industry,
             companyLocation: location
           });
         }
