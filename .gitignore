@@ -160,3 +160,13 @@ cython_debug/
 #.idea/
 
 config.ini
+
+
+# Some file I don't understand - Jiusi
+app/node_modules/
+package-lock.json
+package.json
+
+.DS_Store
+app/.DS_Store
+app/jd_extract/.DS_Store
