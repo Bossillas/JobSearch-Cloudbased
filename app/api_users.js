@@ -35,24 +35,44 @@ exports.get_users = async (req, res) => {
         console.log("/stats: calling RDS...");
 
         var sql = `
+          WITH cte_skill_concat AS (
+            SELECT 
+              students.id AS id, 
+              students.lastname AS lastname, 
+              students.firstname AS firstname,
+              students.email AS email, 
+              students.linkedin AS linkedin, 
+              schools.name AS schoolName,
+              majors.major AS major,
+              GROUP_CONCAT(skills.skill SEPARATOR ', ') AS skills
+            FROM students
+            JOIN schools 
+              ON students.school_id = schools.id
+            JOIN student_major sm
+              ON students.id = sm.student_id
+            JOIN majors 
+              ON majors.id = sm.major_id
+            JOIN student_skill ss 
+              ON students.id = ss.student_id
+            JOIN skills 
+              ON skills.id = ss.skill_id
+            GROUP BY students.id, students.lastname, students.firstname, students.email, students.linkedin, schools.name, majors.major
+            ORDER BY students.id ASC
+          )
           SELECT 
-            students.id AS id, 
-            students.lastname AS lastname, 
-            students.firstname AS firstname,
-            students.email AS email, 
-            students.linkedin AS linkedin, 
-            schools.name AS schoolName,
-            GROUP_CONCAT(skills.skill SEPARATOR ', ') AS skills
-          FROM students
-          JOIN schools 
-            ON students.school_id = schools.id
-          JOIN student_skill ss 
-            ON students.id = ss.student_id
-          JOIN skills 
-            ON skills.id = ss.skill_id
-          GROUP BY students.id, students.lastname, students.firstname, students.email, students.linkedin, schools.name
-          ORDER BY students.id ASC;
+            id, 
+            lastname, 
+            firstname,
+            email, 
+            linkedin, 
+            schoolName,
+            GROUP_CONCAT(major SEPARATOR ', ') AS majors,
+            skills
+          FROM cte_skill_concat
+          GROUP BY id, lastname, firstname, email, linkedin, schoolName, skills
+          ORDER BY id ASC;
           `;
+
 
         dbConnection.query(sql, (err, results, _) => {
           try {
@@ -97,7 +117,7 @@ exports.get_users = async (req, res) => {
           const item = results[0][i];
           console.log(item);
           console.log("next");
-          const { id, lastname, firstname, email, linkedin, schoolName, skills } = item;
+          const { id, lastname, firstname, email, linkedin, schoolName, majors, skills } = item;
           extractedData.push({
             //index: i, // Starting from 0
             id,
@@ -106,6 +126,7 @@ exports.get_users = async (req, res) => {
             email,
             linkedin,
             schoolName,
+            majors,
             skills
           });
         }
