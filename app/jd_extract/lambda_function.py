@@ -102,10 +102,9 @@ def lambda_handler(event, context):
     print("_______________________")
     print("**Downloading results from S3**")
     
-    TO_CHANGE = "jobdescription/2efc208e-1b73-462d-8e57-2f44b13d2dda.txt"
-    #bucket.download_file(job_description_key, local_filename)
-    bucket.download_file(TO_CHANGE, local_filename)
-    
+    full_job_description_key = "jobdescription/" + job_description_key + ".txt"
+    bucket.download_file(full_job_description_key, local_filename)
+
     # Open the downloaded file and read the contents
     with open(local_filename, "r") as infile:  # Use "r" for reading text
         job_description = infile.read()
