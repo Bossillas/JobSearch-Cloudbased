@@ -35,12 +35,24 @@ exports.get_users = async (req, res) => {
         console.log("/stats: calling RDS...");
 
         var sql = `
-            select students.id as id, students.lastname as lastname,students.firstname as firstname,students.email as email,students.linkedin as linkedin,schools.name as schoolName
-            from students
-            join schools
-            on students.school_id = schools.id
-            order by students.id asc;
-            `;
+          SELECT 
+            students.id AS id, 
+            students.lastname AS lastname, 
+            students.firstname AS firstname,
+            students.email AS email, 
+            students.linkedin AS linkedin, 
+            schools.name AS schoolName,
+            GROUP_CONCAT(skills.skill SEPARATOR ', ') AS skills
+          FROM students
+          JOIN schools 
+            ON students.school_id = schools.id
+          JOIN student_skill ss 
+            ON students.id = ss.student_id
+          JOIN skills 
+            ON skills.id = ss.skill_id
+          GROUP BY students.id, students.lastname, students.firstname, students.email, students.linkedin, schools.name
+          ORDER BY students.id ASC;
+          `;
 
         dbConnection.query(sql, (err, results, _) => {
           try {
@@ -85,15 +97,16 @@ exports.get_users = async (req, res) => {
           const item = results[0][i];
           console.log(item);
           console.log("next");
-          const { id, email, lastname, firstname, linkedin, schoolName } = item;
+          const { id, lastname, firstname, email, linkedin, schoolName, skills } = item;
           extractedData.push({
             //index: i, // Starting from 0
             id,
-            email,
             lastname,
             firstname,
+            email,
             linkedin,
-            schoolName
+            schoolName,
+            skills
           });
         }
 
