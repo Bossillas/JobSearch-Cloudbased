@@ -44,6 +44,15 @@ var industry = require('./api_industry.js');
 var company = require('./api_company.js');
 var job = require('./api_job.js');
 
+var status = require('./api_status.js');
+
+var major = require('./api_major.js');
+
+var skill = require('./api_skill.js');
+
+var school = require('./api_school.js');
+
+var student = require('./api_student.js');
 // var summary = require('./api_job_summary.js');
 
 // var image = require('./api_image.js');
@@ -59,6 +68,16 @@ app.put('/industry', industry.put_industry); // app.put('/user',(req,res => {...
 app.put('/company', company.put_company);
 
 app.post('/job', job.post_job);
+
+app.post('/status', status.post_status);
+
+app.put('/major', major.put_major);
+
+app.put('/skill', skill.put_skill);
+
+app.put('/school', school.put_school);
+
+app.put('/student', student.put_student);
 
 // app.get('/summary', summary.get_summary);
 // app.post('/image/:userid', image.post_image);
