@@ -18,15 +18,34 @@ exports.put_student = async (req, res) => {
         function createPlaceholders(list) {
             return list.map(() => '?').join(',');
         }
-        function values_skill_major(student_id, len) {
+        function values_skill_major(len) {
             let result = '';
             for (let i = 0; i < len; i++) {
-                result += `(${student_id}, ?)`;
+                result += `(?, ?)`;
                 if (i < len - 1) {
                     result += ', ';
                 }
             }
             return result;
+        }
+        function generate_skill_major_lst(student_id, array) {
+            let mergedArray = [];
+
+            for (let i = 0; i < array.length; i++) {
+                mergedArray.push(student_id);
+                mergedArray.push(array[i]);
+            }
+
+            return mergedArray;
+        }
+        function generate_skill_major_id(array) {
+            let id_array = [];
+
+            for (let i = 0; i < array.length; i++) {
+                id_array.push(array[i]["id"])
+            }
+
+            return id_array;
         }
         
         var sql_school = "SELECT id FROM schools WHERE name = ?";
@@ -50,11 +69,11 @@ exports.put_student = async (req, res) => {
             var student_id = rds_response.insertId;
 
             var sql_student_skill = `INSERT INTO student_skill (student_id, skill_id)
-                                    VALUES` + values_skill_major(student_id, data.skill.length) + `;`;
+                                    VALUES` + values_skill_major(data.skill.length) + `;`;
             var sql_student_major = `INSERT INTO student_major (student_id, major_id)
-                                    VALUES` + values_skill_major(student_id, data.major.length) + `;`;
-            var rds_skill_res = queryAsync(sql_student_skill, results[1]["id"]);
-            var rds_major_res = queryAsync(sql_student_major, results[2]["id"]);
+                                    VALUES` + values_skill_major(data.major.length) + `;`;
+            var rds_skill_res = queryAsync(sql_student_skill, generate_skill_major_lst(student_id, generate_skill_major_id(results[1])));
+            var rds_major_res = queryAsync(sql_student_major, generate_skill_major_lst(student_id, generate_skill_major_id(results[2])));
 
             Promise.all([rds_skill_res, rds_major_res]).then(results => {
                 return res.status(200).json({
