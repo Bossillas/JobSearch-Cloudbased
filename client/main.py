@@ -17,6 +17,8 @@ import matplotlib.image as img
 
 import client_functions as cf
 
+import client_employer as ef
+
 
 
 
@@ -43,10 +45,10 @@ def prompt():
   print("   2 => check users")
   print("   3 => check jobs")
   print("   4 => job description extraction")
-  print("   5 => download and display")
+  print("   5 => check student&job match")
   print("   6 => bucket contents")
-  print("   7 => add user")
-  print("   8 => upload")
+  print("   7 => Employer: add job")
+  print("   8 => Employer: add company")
 
   cmd = int(input())
   return cmd
@@ -111,9 +113,9 @@ while cmd != 0:
   elif cmd == 6:
     cf.bucket_contents(baseurl)
   elif cmd == 7:
-    cf.add_user(baseurl)
+    ef.add_job(baseurl)
   elif cmd == 8:
-    cf.upload(baseurl)
+    ef.add_company(baseurl)
   else:
     print("** Unknown command, try again...")
   #
