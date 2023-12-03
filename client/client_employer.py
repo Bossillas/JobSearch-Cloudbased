@@ -237,11 +237,11 @@ def add_job(baseurl):
     #
     body = res.json()
 
-    userid = body["jobId"]
+    jobid = body["jobId"]
     message = body["message"]
     print(message)
 
-    print("Job id", userid, "is successfully created.")
+    print("Job id", jobid, "is successfully created.")
 
   except Exception as e:
     logging.error("add_company() failed:")
@@ -250,10 +250,11 @@ def add_job(baseurl):
     return
   
   try:
-    return
+    print("job description upload start.")
     #
     # build the data packet:
     #
+    #print(description)
     infile = open(description, "rb")
     bytes = infile.read()
     infile.close()
@@ -267,7 +268,7 @@ def add_job(baseurl):
     data = base64.b64encode(bytes)
     datastr = data.decode()
 
-    data = {"filename": description, "data": datastr}
+    data = {"jobid": jobid, "filename": description, "data": datastr}
 
     #
     # call the web service:
@@ -295,7 +296,7 @@ def add_job(baseurl):
     #
     body = res.json()
 
-    assetid = body["assetid"]
+    assetid = body["jobId"]
 
     print("Job Description uploaded, jd id =", assetid)
 
