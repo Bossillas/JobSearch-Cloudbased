@@ -42,7 +42,7 @@ def prompt():
   print("   1 => check stats")
   print("   2 => check users")
   print("   3 => check jobs")
-  print("   4 => download")
+  print("   4 => job description extraction")
   print("   5 => download and display")
   print("   6 => bucket contents")
   print("   7 => add user")
@@ -89,6 +89,7 @@ if not pathlib.Path(config_file).is_file():
 configur = ConfigParser()
 configur.read(config_file)
 baseurl = configur.get('client', 'webservice')
+apigatewayurl = configur.get('api_gateway', 'webservice')
 
 #
 # main processing loop:
@@ -104,9 +105,9 @@ while cmd != 0:
   elif cmd == 3:
     cf.assets(baseurl)
   elif cmd == 4:
-    cf.download(baseurl)
+    cf.job_description_extraction(apigatewayurl)
   elif cmd == 5:
-    cf.download(baseurl, True)
+    cf.student_job_matching(apigatewayurl)
   elif cmd == 6:
     cf.bucket_contents(baseurl)
   elif cmd == 7:

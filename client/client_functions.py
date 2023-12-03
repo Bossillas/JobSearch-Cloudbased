@@ -1,6 +1,7 @@
 
 import requests  # calling web service
 import jsons  # relational-object mapping
+import json
 
 import uuid
 import pathlib
@@ -8,6 +9,7 @@ import logging
 import sys
 import os
 import base64
+import pandas as pd
 
 from configparser import ConfigParser
 
@@ -206,6 +208,158 @@ def assets(baseurl):
     logging.error("url: " + url)
     logging.error(e)
     return
+
+
+############################################################
+# job_description_extraction
+def job_description_extraction(baseurl):
+  """
+  Prompts the user for the job id, and provide user with the key word extraction result.
+
+  Parameters
+    baseurl: baseurl for web service
+  Returns
+    nothing
+  """
+
+  print("Enter job id>")
+  jobid = input()
+  print("It might takes about 10 seconds to run, please wait...")
+
+  try:
+    #
+    # call the web service:
+    #
+    api = '/job_description_extraction'
+    url = baseurl + api + '/' + jobid
+
+    res = requests.get(url)
+
+    # let's look at what we got back:
+    if res.status_code != 200:
+      # failed:
+      print("Failed with status code:", res.status_code)
+      print("url: " + url)
+      if res.status_code == 400:
+        # we'll have an error message
+        body = res.json()
+        print("Error message:", body)
+      return
+
+    # extract results:
+    body = res.json()
+    # print(body)
+
+    # Replace single quotes with double quotes, but first replace the inner single quotes in the lists
+    body = body.replace("['", '[\"').replace("']", '\"]').replace("', '", '", "').replace("', \"", '", "').replace("\", '", '", "')
+    # Now replace the outer single quotes
+    body = body.replace("'", "\"")
+    # Convert to dictionary
+    body_dict = json.loads(body)
+
+    print("** Job Description Keys: **")
+    print('_________________________________________________________')
+    print('- Provide sponsorship:', body_dict['provide sponsorship'])
+    print('_________________________________________________________')
+    print('- Security clearance requirements:', body_dict['security clearance'])
+    print('_________________________________________________________')
+    print('- Skills requirements:')
+    skills_str = ''
+    for s in body_dict['skills']:
+      skills_str += s
+      skills_str += ', '
+    print(skills_str)
+    print('_________________________________________________________')
+    print('- Number of years of working experience requirements:', body_dict['number of years of working experience'])
+    print('_________________________________________________________')
+    print('- Education background requirements:')
+    edus_str = ''
+    for e in body_dict['education background requirement']:
+      edus_str += e
+      edus_str += ', '
+    print(edus_str)
+
+    return
+
+  except Exception as e:
+    logging.error("job_description_extraction() failed:")
+    logging.error("url: " + url)
+    logging.error(e)
+    return
+  
+
+############################################################
+# Student job matching
+def student_job_matching(baseurl):
+  """
+  Prompts the user for the job id and student id, and provide user with student vs. job matching score.
+
+  Parameters
+    baseurl: baseurl for web service
+  Returns
+    nothing
+  """
+
+  print("Enter job id>")
+  jobid = input()
+  print("Enter user id>")
+  studentid = input()
+  print("It might takes about 10 seconds to run, please wait...")
+
+  try:
+    #
+    # call the web service:
+    #
+    api = '/student_job_matching'
+    url = baseurl + api + '/' + jobid + '/' + studentid
+
+    res = requests.get(url)
+
+    # let's look at what we got back:
+    if res.status_code != 200:
+      # failed:
+      print("Failed with status code:", res.status_code)
+      print("url: " + url)
+      if res.status_code == 400:
+        # we'll have an error message
+        body = res.json()
+        print("Error message:", body)
+      return
+
+    # extract results:
+    body = res.json()
+    # print(body)
+
+    # # Replace single quotes with double quotes, but first replace the inner single quotes in the lists
+    # body = body.replace("['", '[\"').replace("']", '\"]').replace("', '", '", "').replace("', \"", '", "').replace("\", '", '", "')
+    # # Now replace the outer single quotes
+    # body = body.replace("'", "\"")
+    # # Convert to dictionary
+    body_dict = json.loads(body)
+
+    print("** User VS. Job Matching: **")
+    print('_________________________________________________________')
+    print('Score:', body_dict['score'])
+    print('_________________________________________________________')
+    print('Strengths:')
+    for s in body_dict['strengths']:
+      print(" - ", s)
+    print('_________________________________________________________')
+    print('Areas for improvement:')
+    for a in body_dict['areas_for_improvement']:
+      print(' - ', a)
+    return
+
+  except Exception as e:
+    logging.error("job_description_extraction() failed:")
+    logging.error("url: " + url)
+    logging.error(e)
+    return
+
+
+
+
+
 
 
 ###################################################################
