@@ -270,7 +270,10 @@ def job_description_extraction(baseurl):
       skills_str += ', '
     print(skills_str)
     print('_________________________________________________________')
-    print('- Number of years of working experience requirements:', body_dict['number of years of working experience'])
+    if body_dict['number of years of working experience'] == -1:
+      print('- Number of years of working experience requirements: Not mentioned')
+    else:
+      print('- Number of years of working experience requirements:', body_dict['number of years of working experience'])
     print('_________________________________________________________')
     print('- Education background requirements:')
     edus_str = ''
