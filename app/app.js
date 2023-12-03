@@ -55,6 +55,8 @@ var school = require('./api_school.js');
 var student = require('./api_student.js');
 
 var resume = require('./api_resume.js');
+
+var jd = require('./api_jd.js');
 // var summary = require('./api_job_summary.js');
 
 // var image = require('./api_image.js');
@@ -82,6 +84,8 @@ app.put('/school', school.put_school);
 app.put('/student', student.put_student);
 
 app.post('/resume/:id', resume.post_resume);
+
+app.post('/jd', jd.post_jd);
 
 // app.get('/summary', summary.get_summary);
 // app.post('/image/:userid', image.post_image);
