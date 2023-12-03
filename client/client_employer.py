@@ -248,3 +248,59 @@ def add_job(baseurl):
     logging.error("url: " + url)
     logging.error(e)
     return
+  
+  try:
+    return
+    #
+    # build the data packet:
+    #
+    infile = open(description, "rb")
+    bytes = infile.read()
+    infile.close()
+
+    #
+    # now encode the image as base64. Note b64encode returns
+    # a bytes object, not a string. So then we have to convert
+    # (decode) the bytes -> string, and then we can serialize
+    # the string as JSON for upload to server:
+    #
+    data = base64.b64encode(bytes)
+    datastr = data.decode()
+
+    data = {"filename": description, "data": datastr}
+
+    #
+    # call the web service:
+    #
+    api = '/jd'
+    url = baseurl + api
+
+    res = requests.post(url, json=data)
+
+    #
+    # let's look at what we got back:
+    #
+    if res.status_code != 200:
+      # failed:
+      print("Failed with status code:", res.status_code)
+      print("url: " + url)
+      if res.status_code == 400:  # we'll have an error message
+        body = res.json()
+        print("Error message:", body["message"])
+      #
+      return
+
+    #
+    # success, extract userid:
+    #
+    body = res.json()
+
+    assetid = body["assetid"]
+
+    print("Job Description uploaded, jd id =", assetid)
+
+  except Exception as e:
+    logging.error("upload() failed:")
+    logging.error("url: " + url)
+    logging.error(e)
+    return
