@@ -36,3 +36,139 @@ def add_student(baseurl):
     print("Enter school name>")
     school = input()
     
+    print("Enter skills (type 0 to stop)>")
+    skill = input()
+    skills = []
+    while skill != 0:
+        skills.append(skill)
+        print("Enter skills (type 0 to stop)>")
+        skill = input()
+        
+    print("Enter majors (type 0 to stop)>")
+    major = input()
+    majors = []
+    while major != 0:
+        majors.append(major)
+        print("Enter skills (type 0 to stop)>")
+        major = input()
+        
+    print("Enter resume filename>")
+    resume = input()
+    
+    # add skills & majors
+    add_skills(baseurl, skills)
+    add_majors(baseurl, majors)
+    
+    # add student
+    url = baseurl + "/student"
+    data = {
+        "firstname": firstname,
+        "lastname": lastname,
+        "email": email,
+        "linkedin": linkedin,
+        "resume_s3": None,
+        "school": school,
+        "skill": skills,
+        "major": majors
+    }
+    try:
+        res = requests.put(url, json=data)
+        if res.status_code != 200:
+                # failed:
+                print("Failed with status code:", res.status_code)
+                print("url: " + url)
+                if res.status_code == 400:  # we'll have an error message
+                    body = res.json()
+                    print("Error message:", body["message"])
+                #
+                return
+    except Exception as e:
+        logging.error("add_student() failed:")
+        logging.error("url: " + url)
+        logging.error(e)
+        return
+    
+    # get student id if success
+    student_id = res.body["studentId"]
+    
+    # add resume
+    add_resume(baseurl, resume, student_id)
+    
+    
+def add_skills(baseurl, skills):
+    
+    url = baseurl + "/skill"
+    
+    for skill in skills:
+        data = {"skill": skill}
+        res = requests.put(url, json=data)
+        
+        if res.status_code != 200:
+            # failed:
+            print("Failed with status code:", res.status_code)
+            print("url: " + url)
+            if res.status_code == 400:  # we'll have an error message
+                body = res.json()
+                print("Error message:", body["message"])
+            #
+            return
+    
+    print("Insert skills successfully!")
+    
+def add_majors(baseurl, majors):
+    url = baseurl + "/skill"
+    
+    for major in majors:
+        data = {"major": major}
+        res = requests.put(url, json=data)
+        
+        if res.status_code != 200:
+            # failed:
+            print("Failed with status code:", res.status_code)
+            print("url: " + url)
+            if res.status_code == 400:  # we'll have an error message
+                body = res.json()
+                print("Error message:", body["message"])
+            #
+            return
+    
+    print("Insert majors successfully!")
+    
+def add_resume(baseurl, local_filename, student_id):
+    url = baseurl + "/resume/" + str(student_id)
+    
+    if not pathlib.Path(local_filename).is_file():
+        print("Local file '", local_filename, "' does not exist...")
+        return
+    
+    try:
+        infile = open(local_filename, "rb")
+        bytes = infile.read()
+        infile.close()
+        
+        data = base64.b64encode(bytes)
+        datastr = data.decode()
+        
+        data = {
+            "data": datastr
+        }
+        
+        # call api
+        res = requests.post(url, json=data)
+        if res.status_code != 200:
+            # failed:
+            print("Failed with status code:", res.status_code)
+            print("url: " + url)
+            if res.status_code == 400:  # we'll have an error message
+                body = res.json()
+                print("Error message:", body["message"])
+            #
+            return
+        
+        # success
+        print("Resume uploaded, student id =", student_id)
+    except Exception as e:
+        logging.error("add_resume() failed:")
+        logging.error("url: " + url)
+        logging.error(e)
+        return
