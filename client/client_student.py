@@ -55,6 +55,11 @@ def add_student(baseurl):
     print("Enter resume filename>")
     resume = input()
     
+    # check if resume file exist
+    if not pathlib.Path(resume).is_file():
+        print("Local file '", resume, "' does not exist...")
+        return
+    
     # add skills & majors
     add_skills(baseurl, skills)
     add_majors(baseurl, majors)
@@ -136,10 +141,6 @@ def add_majors(baseurl, majors):
     
 def add_resume(baseurl, local_filename, student_id):
     url = baseurl + "/resume/" + str(student_id)
-    
-    if not pathlib.Path(local_filename).is_file():
-        print("Local file '", local_filename, "' does not exist...")
-        return
     
     try:
         infile = open(local_filename, "rb")
