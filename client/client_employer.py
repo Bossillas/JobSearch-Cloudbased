@@ -142,7 +142,7 @@ def add_company(baseurl):
 
 ###################################################################
 #
-# add_company
+# add_job
 #
 def add_job(baseurl):
   """
@@ -305,3 +305,89 @@ def add_job(baseurl):
     logging.error("url: " + url)
     logging.error(e)
     return
+
+
+###################################################################
+#
+# add_job
+#
+def change_status(baseurl):
+  """
+  Prompts the user for changing status
+  
+  Parameters
+  ----------
+  baseurl: baseurl for web service
+  
+  Returns
+  -------
+  nothing
+  """
+
+  print("Enter job id>")
+  job_id = int(input())
+
+  print("Enter new status (open/closed)>")
+  new_status = input()
+
+
+  try:
+    #
+    # build the data packet:
+    #
+    data = {
+      "job_id": job_id, 
+      "new_status": new_status
+    }
+    
+
+    #
+    # call the web service:
+    #
+    api = '/status'
+    url = baseurl + api
+
+    res = requests.post(url, json=data)
+
+    #
+    # let's look at what we got back:
+    #
+    if res.status_code != 200:
+      # failed due to industry not found:
+      print("Failed with status code:", res.status_code)
+      print("url: " + url)
+      body = res.json()
+      #print("Error message:", body["message"])
+      if res.status_code == 404:  # we'll have an error message
+        body = res.json()
+        print("Error message:", body["message"])
+        if body["message"] == "Job not found":
+            print("Job id is invalid. Please double check your job id.")
+            print("-----------------------------------------------------------")
+            return
+      
+      # failed for other reason
+      else:
+        body = res.json()
+        print("Error message:", body["message"])
+        return
+
+
+    #
+    # success, extract userid:
+    #
+    body = res.json()
+
+    #jobid = body["jobId"]
+    message = body["message"]
+    print(message)
+
+    #print("Job id", jobid, "is successfully created.")
+
+  except Exception as e:
+    logging.error("change_status() failed:")
+    logging.error("url: " + url)
+    logging.error(e)
+    return
+  
+  

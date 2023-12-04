@@ -49,6 +49,7 @@ def prompt():
   print("   6 => bucket contents")
   print("   7 => Employer: add job")
   print("   8 => Employer: add company")
+  print("   9 => Employer: change job status")
 
   cmd = int(input())
   return cmd
@@ -116,6 +117,8 @@ while cmd != 0:
     ef.add_job(baseurl)
   elif cmd == 8:
     ef.add_company(baseurl)
+  elif cmd == 9:
+    ef.change_status(baseurl)
   else:
     print("** Unknown command, try again...")
   #
