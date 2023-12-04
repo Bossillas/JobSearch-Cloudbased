@@ -19,6 +19,8 @@ import client_functions as cf
 
 import client_employer as ef
 
+import client_student as sf
+
 
 
 
@@ -50,6 +52,7 @@ def prompt():
   print("   7 => Employer: add job")
   print("   8 => Employer: add company")
   print("   9 => Employer: change job status")
+  print("   10 => Student: add student")
 
   cmd = int(input())
   return cmd
@@ -119,6 +122,8 @@ while cmd != 0:
     ef.add_company(baseurl)
   elif cmd == 9:
     ef.change_status(baseurl)
+  elif cmd == 10:
+    sf.add_student(baseurl)
   else:
     print("** Unknown command, try again...")
   #
