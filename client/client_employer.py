@@ -283,6 +283,7 @@ def add_job(baseurl):
       # failed:
       print("Failed with status code:", res.status_code)
       print("url: " + url)
+      #print("Error message:", body["message"])
       if res.status_code == 400:  # we'll have an error message
         body = res.json()
         print("Error message:", body["message"])
