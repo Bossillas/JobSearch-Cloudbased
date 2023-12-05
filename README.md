@@ -1,6 +1,6 @@
 # JobSearch-Cloudbased
 
-###
+## JavaScript Code
 index.js
 config.js
 aws.js
@@ -14,9 +14,6 @@ database.js
 - api_users.js: 
 - api_stats.js
 
-
-
-
 ### PUT APIs
 - api_company.js
 - api_industry.js
@@ -26,3 +23,14 @@ database.js
 
 ### POST APIs
 - api_job.js
+
+## Client Code
+
+### Functions
+- client_functions.py: general functions and calls to Lambda functions
+- client_employer.py: 
+- client_student.py: 
+
+## Lambda Function Code
+- jd_extract
+- student_job_matching
