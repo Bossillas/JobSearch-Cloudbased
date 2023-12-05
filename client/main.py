@@ -115,14 +115,12 @@ while cmd != 0:
   elif cmd == 5:
     cf.student_job_matching(apigatewayurl)
   elif cmd == 6:
-    cf.bucket_contents(baseurl)
-  elif cmd == 7:
     ef.add_job(baseurl)
-  elif cmd == 8:
+  elif cmd == 7:
     ef.add_company(baseurl)
-  elif cmd == 9:
+  elif cmd == 8:
     ef.change_status(baseurl)
-  elif cmd == 10:
+  elif cmd == 9:
     sf.add_student(baseurl)
   else:
     print("** Unknown command, try again...")
