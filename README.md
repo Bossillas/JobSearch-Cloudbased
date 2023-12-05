@@ -77,39 +77,40 @@ project_root/
 
 
 ## app folder (JavaScript Code)
-index.js
-config.js
-aws.js
-database.js
+app.js
+config.js: configuration file for s3 and rdf for all the js files
+aws.js: managing S3 upload
+database.js: managing RDS
 
 #### GET APIs
-- api_assets.js: Return all the job related information from job/company/industry tables
-    
-    jobId, jobTitle, jobUrl, minPay, maxPay, companyName, industry, companyLocation
-
-- api_users.js: 
-- api_stats.js
+- api_assets.js: return all the job related information from job/company/industry tables.
+- api_users.js: return user informations.
+- api_stats.js: check if connection to S3 and RDS is success and return database information.
 
 #### PUT APIs
-- api_company.js
-- api_industry.js
-- api_major.js
-- api_school.js
-- api_skill.js
+- api_company.js: add company profile.
+- api_industry.js: add industry of the company.
+- api_major.js: add major(s) of the student(job seeker).
+- api_school.js: add school of the student(job seeker).
+- api_skill.js: add skill(s) of the student(job seeker).
+- api_student.js: add new student(job seeker) to the database.
 
 #### POST APIs
-- api_job.js
+- api_job.js: post a new job and its related details.
+- api_jd.js: upload job description to S3 bucket.
+- api_resume.js: upload resume to S3 bucket.
+- api_status: update job status (open/close).
 
 
 ## client folder
 
 #### Functions
-- client_functions.py: general functions and calls to Lambda functions
-- client_employer.py: 
-- client_student.py: 
+- client_functions.py: general functions and calls to Lambda functions.
+- client_employer.py: client side funcitons that managing employer data.
+- client_student.py: client side funcitons that managing student(job seeker) data.
 
 #### App file
-- main.py
+- main.py: client UI.
 
 
 ## lambda_function folder
