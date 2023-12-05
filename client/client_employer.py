@@ -77,7 +77,6 @@ def add_company(baseurl):
     # let's look at what we got back:
     #
     if res.status_code != 200:
-      print("reach here")
       # failed due to industry not found:
       print("Failed with status code:", res.status_code)
       print("url: " + url)
@@ -203,7 +202,6 @@ def add_job(baseurl):
     # let's look at what we got back:
     #
     if res.status_code != 201:
-      print("reach here")
       # failed due to industry not found:
       print("Failed with status code:", res.status_code)
       print("url: " + url)
