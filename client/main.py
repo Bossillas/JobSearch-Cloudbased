@@ -48,11 +48,10 @@ def prompt():
   print("   3 => check jobs")
   print("   4 => job description extraction")
   print("   5 => check student&job match")
-  print("   6 => bucket contents")
-  print("   7 => Employer: add job")
-  print("   8 => Employer: add company")
-  print("   9 => Employer: change job status")
-  print("   10 => Student: add student")
+  print("   6 => Employer: add job")
+  print("   7 => Employer: add company")
+  print("   8 => Employer: change job status")
+  print("   9 => Student: add student")
 
   cmd = int(input())
   return cmd
