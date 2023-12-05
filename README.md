@@ -1,5 +1,40 @@
 # JobSearch-Cloudbased
 
+Our project is a full-stack software app comprising both client-side (Python) and server-side (JavaScript & Python) components. Our app is a professional job search platform that integrates various functionalities for managing user profiles, job postings, and company information. Moreover, we integrate LLM (OpenAi) to enhance job search experience and job fit. The AWS services we used include RDS, S3, Lambda, API Gateway, and EC2. 
+
+Here are some of the main features of our app.
+- **Comprehensive User Profile Management**: Students can manage academic and personal profiles, including majors and skills, which are crucial for tailored job matches. 
+- **Dynamic Job Posting and Company Profiles**: Employers can post or close job listings and manage company profiles.
+- **Resume Handling and Storage**: Integration with AWS S3 allows for efficient storage and retrieval of students’ resumes and job description text files, essential for job applications and searching.
+- **Advanced Matching Capabilities**: LLM integration facilitates complex matching capabilities between students and jobs based on multiple criteria such as the fit between job description and student resume, which enhances the entire user experience and platform’s core functionality.
+
+
+## Architecture
+![Alt text](aws_structure.png)
+**Client Side**: The client side will be a Python command-line interface (similar to Projects 1 and 2). In this case, both companies and students can access the Python file. The client is connected to two endpoints: the EC2 Beanstalk web server endpoint and the API Gateway endpoint.
+
+**AWS EC2**: Host Java Script codes for the web server (mainly I/O operations with S3 and RDS).
+
+**AWS API Gateway**: Contains API routing logic from lambda functions (heavy computations)
+
+**AWS Lambda**: Two functions calling OpenAI API to use LLM for heavy computations (extract keywords from job descriptions and calculate matching scores between students and job descriptions).
+
+**AWS S3**: Store resume (pdf files) and job descriptions (txt files) – files that are hard to store in a relational database.
+
+**AWS RDS**: Store information about students, jobs, and other additional data (such as skills and companies).
+
+## Database Diagram
+![Alt text](database_structure.png)
+The database contains two main components: employers and students
+
+**Employers**: The employers' side consisted of jobs, companies, and industries. 
+
+**Students**: The students’ side consisted of students, schools, majors, and skills. Since one student can have multiple skills and majors, we also need to implement the student_major and student_skill tables as well. 
+
+In `create_database.sql`, the team has also imposed some constraints on the primary key, foreign key, and unique to the appropriate columns.
+
+
+
 ## Project Structure
 ```
 project_root/
@@ -101,3 +136,7 @@ database.js
 - create_database.sql: Initializes the `jobsearch` database and creates necessary tables.
 
 - insert_rows.sql: Populates the `jobsearch` database with initial data.
+
+
+
+
