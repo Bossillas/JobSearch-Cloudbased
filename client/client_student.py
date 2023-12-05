@@ -39,7 +39,7 @@ def add_student(baseurl):
     print("Enter skills (type 0 to stop)>")
     skill = input()
     skills = []
-    while skill != 0:
+    while skill != "0":
         skills.append(skill)
         print("Enter skills (type 0 to stop)>")
         skill = input()
@@ -47,9 +47,9 @@ def add_student(baseurl):
     print("Enter majors (type 0 to stop)>")
     major = input()
     majors = []
-    while major != 0:
+    while major != "0":
         majors.append(major)
-        print("Enter skills (type 0 to stop)>")
+        print("Enter majors (type 0 to stop)>")
         major = input()
         
     print("Enter resume filename>")
@@ -121,7 +121,7 @@ def add_skills(baseurl, skills):
     print("Insert skills successfully!")
     
 def add_majors(baseurl, majors):
-    url = baseurl + "/skill"
+    url = baseurl + "/major"
     
     for major in majors:
         data = {"major": major}
