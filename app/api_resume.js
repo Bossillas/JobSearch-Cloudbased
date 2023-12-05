@@ -36,7 +36,7 @@ exports.post_resume = async (req, res) => {
             var bytes = Buffer.from(S, "base64");
 
             // Asset name with .pdf extension
-            var name = uuid.v4() + ".pdf";
+            var name = uuid.v4();
             var s3_key = "resume/" + name;
 
             // Upload to s3

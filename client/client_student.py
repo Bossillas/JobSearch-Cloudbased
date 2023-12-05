@@ -60,9 +60,10 @@ def add_student(baseurl):
         print("Local file '", resume, "' does not exist...")
         return
     
-    # add skills & majors
+    # add skills & majors & school
     add_skills(baseurl, skills)
     add_majors(baseurl, majors)
+    add_school(baseurl, school)
     
     # add student
     url = baseurl + "/student"
@@ -94,7 +95,7 @@ def add_student(baseurl):
         return
     
     # get student id if success
-    student_id = res.body["studentId"]
+    student_id = res.json()["studentId"]
     
     # add resume
     add_resume(baseurl, resume, student_id)
@@ -138,6 +139,32 @@ def add_majors(baseurl, majors):
             return
     
     print("Insert majors successfully!")
+    
+def add_school(baseurl, school_name):
+    url = baseurl + "/school"
+    
+    data = {
+        "school": school_name
+    }
+    
+    try:
+        # call api
+        res = requests.put(url, json=data)
+        if res.status_code != 200:
+            # failed:
+            print("Failed with status code:", res.status_code)
+            print("url: " + url)
+            if res.status_code == 400:  # we'll have an error message
+                body = res.json()
+                print("Error message:", body["message"])
+            #
+            return
+        print("Insert school successfully!")
+    except Exception as e:
+        logging.error("add_school() failed:")
+        logging.error("url: " + url)
+        logging.error(e)
+        return
     
 def add_resume(baseurl, local_filename, student_id):
     url = baseurl + "/resume/" + str(student_id)
